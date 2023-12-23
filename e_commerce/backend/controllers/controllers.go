@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github/Augustus2011/ecommerce/data"
+	"github/Augustus2011/ecommerce/database"
 	"github/Augustus2011/ecommerce/models"
 	generate "github/Augustus2011/ecommerce/tokens"
 
@@ -19,8 +19,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var UserCollection *mongo.Collection = data.UserData(data.Client, "Users")
-var ProductCollection *mongo.Collection = data.ProductData(data.Client, "Products")
+var UserCollection *mongo.Collection = database.UserData(database.Client, "Users")
+var ProductCollection *mongo.Collection = database.ProductData(database.Client, "Products")
 var Validate = validator.New()
 
 func HashPassword(password string) string {
