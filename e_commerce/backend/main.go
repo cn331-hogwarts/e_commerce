@@ -1,31 +1,36 @@
 package main
 
 import (
-	"github/Augustus2011/ecommerce/controllers"
-	"github/Augustus2011/ecommerce/data"
-	"github/Augustus2011/ecommerce/middleware"
 	"log"
 	"os"
 
-	"github.com/gin-goinc/gin"
+	"github/Augustus2011/ecommerce/controllers"
+	"github/Augustus2011/ecommerce/database"
+	"github/Augustus2011/ecommerce/middleware"
+	"github/Augustus2011/ecommerce/routes"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
 	}
-	app := controllers.NewApplication(data.ProductData(data.Client, "Products"), data.UserData(data.Client, "Users"))
+	app := controllers.NewApplication(database.ProductData(database.Client, "Products"), database.UserData(database.Client, "Users"))
+
 	router := gin.New()
 	router.Use(gin.Logger())
-	router.UserRoutes(router)
+	routes.UserRoutes(router)
 	router.Use(middleware.Authentication())
-
-	router.GET("/addcart", app.AddToCart())
-	router.GET("removeitem", app.RemoveItem())
-	router.GET("/cartcheckout", app.ButFromCart())
-	router.GET("instantbut", app.InstantBuy())
-
-	log.Fatal(router.Run(":") + port)
+	router.GET("/addtocart", app.AddToCart())
+	router.GET("/removeitem", app.RemoveItem())
+	router.GET("/listcart", controllers.GetItemFromCart())
+	router.POST("/addaddress", controllers.AddAddress())
+	router.PUT("/edithomeaddress", controllers.EditHomeAddress())
+	router.PUT("/editworkaddress", controllers.EditWorkAddress())
+	router.GET("/deleteaddresses", controllers.DeleteAddress())
+	router.GET("/cartcheckout", app.BuyFromCart())
+	router.GET("/instantbuy", app.InstantBuy())
+	log.Fatal(router.Run(":" + port))
 }
