@@ -1,11 +1,11 @@
 import React from 'react';
 
-
-function Home(){
+function Home() {
+    console.log('Home component rendered');
     return (
-    <>
-        <h1> Hello world</h1>
-    </>
+        <>
+            <h1>Hello world</h1>
+        </>
     );
 }
 
